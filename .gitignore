@@ -1,0 +1,67 @@
+# Archivos de compilación
+*.o
+*.obj
+*.lo
+*.slo
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+
+# Ejecutables
+*.exe
+*.out
+*.app
+
+# Archivos de depuración y logs
+*.log
+*.dSYM/
+*.stackdump
+
+# Archivos generados por CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+bin/
+lib/
+obj/
+
+# Archivos de Visual Studio
+*.sdf
+*.suo
+*.vcxproj.user
+*.VC.db
+*.ipch
+*.opensdf
+*.ncb
+*.log
+*.tlog/
+*.obj/
+*.idb
+*.pdb
+*.ilk
+*.cache
+*.db
+*.user
+*.vs/
+.vscode/
+
+# Archivos de SFML temporales (si usás recursos externos)
+resources/cache/
+resources/temp/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración personal
+*.swp
+*.bak
+*.tmp
+*.old
+
+# Archivos de entorno
+.env
