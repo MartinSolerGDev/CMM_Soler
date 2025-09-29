@@ -14,6 +14,8 @@ public:
 	Scene* GetCurrentScene();
 	bool hasScene() const;
 
+	void SwitchScene(std::unique_ptr<Scene> scene);
+
 private:
 	std::stack<std::unique_ptr<Scene>> scenes;
 };

@@ -26,20 +26,29 @@ void Game::RunGame()
 
         Scene* current = sceneManager.GetCurrentScene();
 
-        while (const std::optional event = window.pollEvent()) 
+        while (const std::optional event = window.pollEvent())
         {
-            if (event->is<sf::Event::Closed>()) 
+            if (event->is<sf::Event::Closed>())
             {
                 window.close();
                 continue;
             }
             current->HandleEvent(*event);
         }
+
         current->Update(deltaTime);
+        if (!current->GetRequestedScene().empty())
+        {
+            std::string next = current->GetRequestedScene();
+            current->ClearRequestedScene();
+
+            if (next == "MainMenu")
+            {
+                sceneManager.SwitchScene(std::make_unique<MenuScene>(window, resources, sceneManager));
+            }
+            //TODO add defeat scene, options scene (on main menu)
+            continue; 
+        }
         current->Render();
     }
 }
-
-
-
-

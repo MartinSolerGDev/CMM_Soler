@@ -11,7 +11,6 @@ PlayerCharacter::PlayerCharacter(sf::RenderWindow& win, const sf::Texture& Playe
     sprite.setScale({ 1.5f, 1.5f });
 
     crosshair.setOrigin({ crosshairText.getSize().x / 2.f, crosshairText.getSize().y / 2.f });
-
 }
 
 void PlayerCharacter::HandleEvent(const sf::Event& event)
@@ -22,14 +21,22 @@ void PlayerCharacter::HandleEvent(const sf::Event& event)
             keyPressed->scancode == sf::Keyboard::Scancode::Left)
         {
             moveDir = -1.f;
-            //std::cout << "Tecla presionada: "<< sf::Keyboard::getDescription(keyPressed->scancode).toAnsiString()<< "\n";
         }
         else if (keyPressed->scancode == sf::Keyboard::Scancode::D ||
             keyPressed->scancode == sf::Keyboard::Scancode::Right)
         {
             moveDir = 1.f;
-           // std::cout << "Tecla presionada: "<< sf::Keyboard::getDescription(keyPressed->scancode).toAnsiString()<< "\n";
         }
+        else if (keyPressed->scancode == sf::Keyboard::Scancode::Num1)
+            projectileManager->SetCurrentBulletType(PlayerProjectileType::Base);
+        else if (keyPressed->scancode == sf::Keyboard::Scancode::Num2)
+            projectileManager->SetCurrentBulletType(PlayerProjectileType::Normal);
+        else if (keyPressed->scancode == sf::Keyboard::Scancode::Num3)
+            projectileManager->SetCurrentBulletType(PlayerProjectileType::Rare);
+        else if (keyPressed->scancode == sf::Keyboard::Scancode::Num4)
+            projectileManager->SetCurrentBulletType(PlayerProjectileType::Epic);
+        else if (keyPressed->scancode == sf::Keyboard::Scancode::Num5)
+            projectileManager->SetCurrentBulletType(PlayerProjectileType::Legendary);
     }
     else if (const auto* keyReleased = event.getIf<sf::Event::KeyReleased>()) 
     {
@@ -39,14 +46,13 @@ void PlayerCharacter::HandleEvent(const sf::Event& event)
             keyReleased->scancode == sf::Keyboard::Scancode::Right)
         {
             moveDir = 0.f;
-            //std::cout << "Tecla liberada: "<< sf::Keyboard::getDescription(keyReleased->scancode).toAnsiString()<< "\n";
         }
     }
     else if (const auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) 
     {
         if (mousePressed->button == sf::Mouse::Button::Left) 
         {
-            if (fireTimer == 0.f && ammo > 0)
+            if (fireTimer == 0.f)
             {
                 sf::Vector2f muzzle = GetMuzzlePosition();
                 sf::Vector2f mouse = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
@@ -57,15 +63,12 @@ void PlayerCharacter::HandleEvent(const sf::Event& event)
                 if (projectileManager)
                 {
                     projectileManager->Fire(muzzle, dir);
-                    ammo--;
                     fireTimer = fireCooldown;
                 }
             }
 
         }
     }
-
-
 }
 
 void PlayerCharacter::Update(float deltaTime)

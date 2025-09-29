@@ -16,10 +16,16 @@ public:
 	virtual void Update(float deltaTime) = 0;
 	virtual void RenderScene() = 0;
 	virtual void Render();
-	
 
-protected: 
+	std::string GetRequestedScene() const;
+	void ClearRequestedScene();
+
+protected:
 	sf::RenderWindow& window;
 	std::unique_ptr <sf::Sprite> background;
-};
 
+	void RequestSceneChange(const std::string& sceneName);
+
+private:
+	std::string requestedScene;
+};

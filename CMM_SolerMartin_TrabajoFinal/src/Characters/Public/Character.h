@@ -18,7 +18,7 @@ public:
     //Getters
     sf::Vector2f GetPosition() const;
     sf::Angle GetRotation() const;
-
+    sf::FloatRect GetSpriteBounds() const; 
     //Animations
     virtual void Animate(float deltaTime);
 protected:

@@ -21,27 +21,36 @@ struct SpawnZone {
     }
 };
 
+
+
 class DuckManager
 {
 public:
-    DuckManager(const sf::Texture& duckTexture, std::size_t maxDucks, float spawnIntervalSeconds);
+    DuckManager(const std::unordered_map<DuckType, sf::Texture*>& duckTextures,std::size_t maxDucks,float spawnIntervalSeconds);
+
     ~DuckManager() = default;
 
     void AddSpawnZone(const SpawnZone& zone);
     void Update(float deltaTime);
     void Draw(sf::RenderWindow& window);
-
-private:
-    void SpawnDuck();
-
-    struct DuckSlot 
+   
+    struct DuckSlot
     {
         std::unique_ptr<Duck> duck;
+        DuckType type = DuckType::Normal;
         bool active = false;
     };
 
+    std::vector<DuckManager::DuckSlot>& GetDucks();
+
+
+private:
+    DuckType ChooseDuckType();
+
+    void SpawnDuck();
+
     std::vector<DuckSlot> pool;
-    const sf::Texture& texture;
+    std::unordered_map<DuckType, sf::Texture*> textures;
     std::size_t maxActiveDucks;
 
     float spawnInterval = 0.f;
@@ -50,9 +59,16 @@ private:
     float spawnMinX = 350.f;
     float spawnMaxX = 1180.f;
 
-
     std::vector<SpawnZone> spawnZones;
 
-    static int RandomInt(int min, int max);
+    //Spawn probabilities:
+    float rarityTimer = 0.f;
+    float rarityIncreaseInterval = 10.f;
+
+    float probNormal = 1.f;
+    float probRare = 0.f;
+    float probEpic = 0.f;
+    float probLegendary = 0.f;
+
 };
 

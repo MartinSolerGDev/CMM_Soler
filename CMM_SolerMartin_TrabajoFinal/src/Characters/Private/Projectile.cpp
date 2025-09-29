@@ -24,3 +24,8 @@ bool Projectile::IsActive() const
 {
 	return bIsActive;
 }
+
+sf::FloatRect Projectile::GetSpriteBounds() const
+{
+	return sprite.getGlobalBounds();
+}

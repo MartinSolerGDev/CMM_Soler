@@ -11,7 +11,7 @@
 MenuScene::MenuScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager)
     : Scene(window), resources(resources), manager(manager), font(resources.GetFont("../assets/font.ttf"))
 {
-    SetBackground(resources.GetTexture("../assets/menubackground.png", sf::IntRect({ 0,0 }, { 1280,720 })));
+    SetBackground(resources.GetTexture("../assets/Background/menubackground.png", sf::IntRect({ 0,0 }, { 1280,720 })));
     sf::Font& font = resources.GetFont("../assets/font.ttf");
 
     sf::Vector2f winSize(window.getSize());
@@ -21,7 +21,7 @@ MenuScene::MenuScene(sf::RenderWindow& window, ResourcesManager& resources, Scen
     title->setPosition({ winSize.x / 2,150.f});
 
 
-    buttonSprite = std::make_unique<sf::Sprite>(resources.GetTexture("../assets/buttonBackground.png", sf::IntRect({ 0,0 }, { 400, 250 })));
+    buttonSprite = std::make_unique<sf::Sprite>(resources.GetTexture("../assets/Background/buttonBackground.png", sf::IntRect({ 0,0 }, { 400, 250 })));
     buttonSprite->setOrigin(buttonSprite->getGlobalBounds().getCenter());
     buttonSprite->setScale({ 0.75f, 0.5f });
     buttonSprite->setPosition({ winSize.x / 2, winSize.y / 2 });

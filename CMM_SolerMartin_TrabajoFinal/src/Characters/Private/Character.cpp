@@ -42,6 +42,11 @@ sf::Angle Character::GetRotation() const
     return sprite.getRotation(); 
 }
 
+sf::FloatRect Character::GetSpriteBounds() const
+{
+    return sprite.getGlobalBounds();
+}
+
 void Character::Animate(float deltaTime)
 {
     //Overriten on children

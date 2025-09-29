@@ -29,10 +29,8 @@ private:
     ProjectileManager* projectileManager = nullptr;
     sf::Vector2f GetMuzzlePosition() const;
 
-    float fireCooldown = 0.5f;   
+    float fireCooldown = 0.3f;   
     float fireTimer = 0.f;
-    int ammo = 20;
-
 
     //Crosshair
     sf::Sprite crosshair;

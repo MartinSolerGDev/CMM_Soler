@@ -4,6 +4,7 @@
 
 Scene::Scene(sf::RenderWindow& window) : window(window)
 {
+
 }
 
 void Scene::SetBackground(const sf::Texture& texture)
@@ -19,4 +20,19 @@ void Scene::Render()
     }
     RenderScene();
     window.display();
+}
+
+std::string Scene::GetRequestedScene() const
+{
+    return requestedScene;;
+}
+
+void Scene::ClearRequestedScene()
+{
+    requestedScene.clear();
+}
+
+void Scene::RequestSceneChange(const std::string& sceneName)
+{
+    requestedScene = sceneName;
 }

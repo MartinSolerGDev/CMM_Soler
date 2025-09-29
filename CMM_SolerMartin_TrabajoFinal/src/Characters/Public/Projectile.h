@@ -14,6 +14,8 @@ public:
     virtual void Deactivate();
     bool IsActive() const;
 
+    sf::FloatRect GetSpriteBounds() const;
+
 protected:
     sf::Sprite sprite;
     sf::Vector2f velocity;

@@ -183,7 +183,9 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClCompile Include="src\Characters\Private\ProjectileFactory.cpp" />
     <ClCompile Include="src\Characters\Private\ProjectileManager.cpp" />
     <ClCompile Include="src\Core\Private\DuckManager.cpp" />
+    <ClCompile Include="src\Core\Private\FileHelpers.cpp" />
     <ClCompile Include="src\Core\Private\Game.cpp" />
+    <ClCompile Include="src\Core\Private\GameplayHUD.cpp" />
     <ClCompile Include="src\Core\Private\GameplayScene.cpp" />
     <ClCompile Include="src\Core\Private\MenuScene.cpp" />
     <ClCompile Include="src\Core\Private\ResourcesManager.cpp" />
@@ -200,7 +202,9 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClInclude Include="src\Characters\Public\ProjectileFactory.h" />
     <ClInclude Include="src\Characters\Public\ProjectileManager.h" />
     <ClInclude Include="src\Core\Public\DuckManager.h" />
+    <ClInclude Include="src\Core\Public\FileHelpers.h" />
     <ClInclude Include="src\Core\Public\Game.h" />
+    <ClInclude Include="src\Core\Public\GameplayHUD.h" />
     <ClInclude Include="src\Core\Public\GameplayScene.h" />
     <ClInclude Include="src\Core\Public\MenuScene.h" />
     <ClInclude Include="src\Core\Public\ResourcesManager.h" />
