@@ -32,4 +32,4 @@ The goal is to capture the retro essence of the original while introducing dynam
 
 1. Clonar el repositorio:  
    ```bash
-   git clone https://github.com/usuario/repositorio.git
+   git clone https://github.com/MartinSolerGDev/CMM_Soler.git
