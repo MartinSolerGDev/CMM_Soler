@@ -26,6 +26,12 @@ The goal is to capture the retro essence of the original while introducing dynam
 
 ## 📸 Screenshots
 
+![Main Menu](./CMM_SolerMartin_TrabajoFinal/res/images/MainMenu.png)  
+*Pantalla principal del juego*
+
+![Gameplay](./CMM_SolerMartin_TrabajoFinal/res/images/gameplay.png)  
+*Acción en pleno gameplay*
+
 ---
 
 ## 📂 Installation & Execution
