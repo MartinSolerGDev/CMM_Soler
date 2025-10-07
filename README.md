@@ -42,7 +42,7 @@ The goal is to capture the retro essence of the original while introducing dynam
 2. Abrir en Visual Studio
 3. Compilar el proyecto y disfrutar del juego
 
-🙌 Acknowledgements
+## 🙌 Acknowledgements
 Este proyecto no hubiera sido posible sin el apoyo y la guía de:
 - Image Campus: por brindar el espacio y la formación que hicieron crecer este proyecto.
 - Prof. Federico Olive.
