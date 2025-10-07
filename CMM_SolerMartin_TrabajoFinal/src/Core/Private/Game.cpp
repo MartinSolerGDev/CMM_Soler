@@ -7,14 +7,17 @@
 //Custom includes
 #include "Game.h"
 #include "MenuScene.h"
-
+#include <AudioManager.h>
 Game::Game()
     : window(sf::VideoMode({ 1280, 720 }), "Quack Attack: Reloaded")
 {
     window.setFramerateLimit(60);
     sceneManager.PushScene(std::make_unique<MenuScene>(window, resources, sceneManager));
-}
 
+    AudioManager::Get().Init(resources);
+
+    AudioManager::Get().PlayMusic("MenuMusic", true);
+}
 
 void Game::RunGame()
 {
@@ -45,9 +48,13 @@ void Game::RunGame()
             if (next == "MainMenu")
             {
                 sceneManager.SwitchScene(std::make_unique<MenuScene>(window, resources, sceneManager));
+                continue;
             }
-            //TODO add defeat scene, options scene (on main menu)
-            continue; 
+            else if (next == "ResumeGameplay")
+            {
+                sceneManager.PopScene();
+                continue;
+            }
         }
         current->Render();
     }

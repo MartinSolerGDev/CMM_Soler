@@ -1,9 +1,7 @@
 #include "GameplayHUD.h"
 #include <string>
 
-GameplayHUD::GameplayHUD(sf::Font& f,
-    const std::unordered_map<PlayerProjectileType, sf::Texture*>& bulletTextures)
-    : font(f)
+GameplayHUD::GameplayHUD(sf::Font& f, const std::unordered_map<PlayerProjectileType, sf::Texture*>& bulletTextures, const sf::Texture& buttonTexture) : font(f)
 {
     timeText = std::make_unique<sf::Text>(font, "Time: 0", 20);
     scoreText = std::make_unique<sf::Text>(font, "Score: 0", 20);
@@ -30,6 +28,12 @@ GameplayHUD::GameplayHUD(sf::Font& f,
         ammoDisplays[type] = std::move(display);
         x += 75.f;
     }
+
+    //Pause button
+    pauseButtonSprite = std::make_unique<sf::Sprite>(buttonTexture);
+    pauseButtonSprite->setOrigin(pauseButtonSprite->getGlobalBounds().getCenter());
+    pauseButtonSprite->setScale({ 0.1f, 0.1f});
+    pauseButtonSprite->setPosition({ 30.f, 30.f }); 
 }
 
 void GameplayHUD::Update(float gameTime, int score, const std::unordered_map<PlayerProjectileType, int>& ammo, PlayerProjectileType currentType)
@@ -75,4 +79,20 @@ void GameplayHUD::Draw(sf::RenderWindow& window)
         window.draw(*timeText);
     if(scoreText)
         window.draw(*scoreText);
+    if (pauseButtonSprite)
+        window.draw(*pauseButtonSprite);
+}
+
+bool GameplayHUD::IsPauseButtonClicked(const sf::Vector2f& mousePos) const
+{
+    return pauseButtonSprite && pauseButtonSprite->getGlobalBounds().contains(mousePos);
+}
+
+sf::Vector2f GameplayHUD::GetAmmoIconPosition(PlayerProjectileType type) const
+{
+    if (auto it = ammoDisplays.find(type); it != ammoDisplays.end() && it->second.icon)
+    {
+        return it->second.icon->getPosition();
+    }
+    return { 0.f, 0.f };
 }

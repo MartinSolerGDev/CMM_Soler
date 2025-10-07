@@ -31,3 +31,15 @@ PlayerProjectileType FileHelpers::DuckTypeToProjectileType(DuckType duckType)
     }
 
 }
+
+int FileHelpers::ScorePerDuck(DuckType duckType)
+{
+    switch (duckType)
+    {
+    case DuckType::Normal:    return 25;
+    case DuckType::Rare:      return 50;
+    case DuckType::Epic:      return 100;
+    case DuckType::Legendary: return 150;
+    default:                  return 0;
+    }
+}

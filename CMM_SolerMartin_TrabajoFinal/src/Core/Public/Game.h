@@ -9,6 +9,7 @@
 #include "ResourcesManager.h"
 
 
+
 class Game
 {
 public:
@@ -20,5 +21,6 @@ private:
     sf::RenderWindow window;
     SceneManager sceneManager;
     ResourcesManager resources;
+
 };
 

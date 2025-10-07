@@ -13,5 +13,6 @@ public:
 	static int RandomInt(int min, int max);
 	static bool RandomChance(float probability);
 	static PlayerProjectileType DuckTypeToProjectileType(DuckType duckType);
+	static int ScorePerDuck(DuckType duckType); 
 };
 

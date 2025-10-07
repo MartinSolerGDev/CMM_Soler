@@ -30,7 +30,7 @@ class Duck :
 {
 public:
     //Constructor
-    Duck(const sf::Texture& texture, const DuckType& duckType);
+    Duck(const sf::Texture& texture, const sf::Texture& explosionTex , const DuckType& duckType);
     ~Duck() override = default;
 
     //General
@@ -38,8 +38,14 @@ public:
     void Animate(float deltaTime) override; 
     //Getters
     sf::Vector2f  GetDuckSize() const; 
+    sf::FloatRect GetCollisionBounds() const;
+
 
     void OnHit();
+
+    bool IsDying() const;
+    bool IsDead()  const;
+
 
 private:
 
@@ -48,10 +54,18 @@ private:
     DuckMovementProfile movementProfile;
     float phaseTimer = 0.f;
 
+    const sf::Texture& explosionTexture;
+
     //Animations
     float animationTimer = 0.f;
     float animationInterval = 0.2f; 
     int currentFrame = 0;
+
+    bool isDying = false;
+    bool isDead = false;
+    float deathTimer = 0.f;
+    int deathFrame = 0;
+    float deathFrameInterval = 0.15f;
 
     //Movement
     sf::Vector2f velocity;

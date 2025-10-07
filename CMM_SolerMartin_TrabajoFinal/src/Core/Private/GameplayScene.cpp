@@ -1,5 +1,8 @@
 #include "GameplayScene.h"
 #include "FileHelpers.h"
+#include <SettingsScene.h>
+#include <LoseScene.h>
+
 
 GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager) 
 	: Scene(window), resources(resources), manager(manager)
@@ -36,7 +39,7 @@ GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resourc
     auto& epicBulletTex = resources.GetTexture("../assets/Bullets/EpicBullet.png", {});
     auto& legendaryBulletTex = resources.GetTexture("../assets/Bullets/LegendaryBullet.png", {});
 
-    std::unordered_map<PlayerProjectileType, sf::Texture*> bulletTextures = {{PlayerProjectileType::Base, &bulletTex}, {PlayerProjectileType::Normal,&normalBulletTex}, {PlayerProjectileType::Rare, &rareBulletTex}, {PlayerProjectileType::Epic, &epicBulletTex},{PlayerProjectileType::Legendary, &legendaryBulletTex}};
+    bulletTextures = {{PlayerProjectileType::Base, &bulletTex}, {PlayerProjectileType::Normal,&normalBulletTex}, {PlayerProjectileType::Rare, &rareBulletTex}, {PlayerProjectileType::Epic, &epicBulletTex},{PlayerProjectileType::Legendary, &legendaryBulletTex}};
     
     projectileManager = std::make_unique<ProjectileManager>(bulletTextures, 50);
     player->SetProjectileManager(projectileManager.get());
@@ -47,9 +50,20 @@ GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resourc
     auto& duckEpicTex = resources.GetTexture("../assets/Ducks/EpicDuck.png", {});
     auto& duckLegendaryTex = resources.GetTexture("../assets/Ducks/LegendaryDuck.png", {});
 
-    std::unordered_map<DuckType, sf::Texture*> duckTextures = {{DuckType::Normal, &duckNormalTex}, {DuckType::Rare, &duckRareTex},{DuckType::Epic, &duckEpicTex}, {DuckType::Legendary, &duckLegendaryTex}};
+    auto& duckNormalExplosionTex = resources.GetTexture("../assets/Ducks/duckExplosion.png", {});
+    auto& duckRareExplosionTex = resources.GetTexture("../assets/Ducks/rareDuckExplosion.png", {});
+    auto& duckEpicExplosionTex = resources.GetTexture("../assets/Ducks/epicDuckExplosion.png", {});
+    auto& duckLegendaryExplosionTex = resources.GetTexture("../assets/Ducks/legendaryDuckExplosion.png", {});
 
-    duckManager = std::make_unique<DuckManager>(duckTextures, 10, 3.f);
+    std::unordered_map<DuckType, DuckResources> duckResources = {
+        {DuckType::Normal,    {&duckNormalTex,    &duckNormalExplosionTex}},
+        {DuckType::Rare,      {&duckRareTex,      &duckRareExplosionTex}},
+        {DuckType::Epic,      {&duckEpicTex,      &duckEpicExplosionTex}},
+        {DuckType::Legendary, {&duckLegendaryTex, &duckLegendaryExplosionTex}}
+    };
+
+
+    duckManager = std::make_unique<DuckManager>(duckResources, 10, 3.f);
 
     //trees
     AddTree({ 140.f, 400.f }, { 80.f, 350.f }, { 140.f, 500.f });     
@@ -57,12 +71,25 @@ GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resourc
 
     //HUD
     auto& font = resources.GetFont("../assets/font.ttf");
-    hud = std::make_unique<GameplayHUD>(font, bulletTextures);
+    auto& buttonTex = resources.GetTexture("../assets/Background/Settings.png", sf::IntRect({ 0,0 }, { 400,400 }));
 
+    hud = std::make_unique<GameplayHUD>(font, bulletTextures, buttonTex);
 }
 
 void GameplayScene::HandleEvent(const sf::Event& event)
 {
+    if (const auto* mousePressed = event.getIf<sf::Event::MouseButtonPressed>())
+    {
+        if (mousePressed->button == sf::Mouse::Button::Left)
+        {
+            sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            if (hud && hud->IsPauseButtonClicked(worldPos))
+            {
+                manager.PushScene(std::make_unique<SettingsScene>(window, resources, manager, true));
+                return;
+            }
+        }
+    }
     if (player)
     {
         player->HandleEvent(event);
@@ -73,8 +100,7 @@ void GameplayScene::Update(float deltaTime)
 {
     if (projectileManager && !projectileManager->HasAnyAmmo())
     {
-        
-        RequestSceneChange("MainMenu");
+        manager.PushScene(std::make_unique<LoseScene>(window, resources, manager, score));
         return;
     }
 
@@ -89,6 +115,12 @@ void GameplayScene::Update(float deltaTime)
     if (duckManager)
     {
         duckManager->Update(deltaTime);
+
+        if (duckManager->hasReachedScapedDucks())
+        {
+            manager.PushScene(std::make_unique<LoseScene>(window, resources, manager, score));
+            return;
+        }
     }
     //Collision check
     for (auto& p : projectileManager->GetProjectiles())
@@ -98,17 +130,42 @@ void GameplayScene::Update(float deltaTime)
         {
             if (!slot.active) continue;
 
-            sf::FloatRect projBounds = p->GetSpriteBounds();
-            sf::FloatRect duckBounds = slot.duck->GetSpriteBounds();
+            sf::FloatRect projBounds = p->GetCollisionBounds();
 
-            if (projBounds.findIntersection(duckBounds))
+            if (projBounds.findIntersection(slot.duck->GetCollisionBounds()))
             {
                 p->Deactivate();
-                slot.active = false; 
-                projectileManager->AddAmmo(FileHelpers::DuckTypeToProjectileType(slot.type), 1);
-                //slot.duck->OnHit();
+
+                // No desactivar el pato inmediatamente
+                if (!slot.duck->IsDying())
+                {
+                    slot.duck->OnHit(); 
+
+                    auto projType = FileHelpers::DuckTypeToProjectileType(slot.type);
+
+                    // Spawn del pickup visual
+                    sf::Vector2f hudPos = hud->GetAmmoIconPosition(projType);
+                    pickups.push_back(std::make_unique<FlyingPickUp>(*bulletTextures[projType], slot.duck->GetCollisionBounds().getCenter(), hudPos, 400.f + (400.f * std::min(1.f, gameTime / 300.f)), projType));
+
+                    timeMultiplier = 1.f + (gameTime / 60.f) * 0.25f;
+                    score += static_cast<int>(FileHelpers::ScorePerDuck(slot.type) * timeMultiplier);
+                }
+
                 break;
+
             }
+        }
+    }
+    for (auto it = pickups.begin(); it != pickups.end(); )
+    {
+        if ((*it)->Update(deltaTime))
+        {
+            projectileManager->AddAmmo((*it)->GetType(), 1);
+            it = pickups.erase(it);
+        }
+        else
+        {
+            ++it;
         }
     }
 
@@ -162,18 +219,31 @@ void GameplayScene::RenderScene()
     if (Sun) window.draw(*Sun);
     for (auto& cloud : clouds)
         window.draw(cloud);
-
-    duckManager->Draw(window);
-    player->Draw(window);
-    projectileManager->Draw(window);
+    
+    if(duckManager) duckManager->Draw(window);
+    if(player) player->Draw(window);
+    if(projectileManager) projectileManager->Draw(window);
 
     for (auto& tree : treeSprites)
     {
         if (tree.tree)
             window.draw(*tree.tree);
     }
+    for (auto& p : pickups)
+        if(p)
+            p->Draw(window);
     if(hud)
         hud->Draw(window);
+}
+
+void GameplayScene::OnEnterScene()
+{
+    AudioManager::Get().PlayMusic("GameMusic", true);
+}
+
+void GameplayScene::OnExitScene()
+{
+    AudioManager::Get().StopMusic();
 }
 
 void GameplayScene::AddTree(const sf::Vector2f& pos, const sf::Vector2f& spawnMin, const sf::Vector2f& spawnMax)

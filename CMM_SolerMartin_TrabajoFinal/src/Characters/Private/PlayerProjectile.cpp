@@ -13,7 +13,6 @@ void PlayerProjectile::Update(float deltaTime)
     pos += velocity * deltaTime;
     sprite.setPosition(pos);
 
-    // Desactivar si sale de pantalla
     if (pos.x < 0 || pos.x > 1280 || pos.y < 0 || pos.y > 720) 
     {
         Deactivate();
@@ -58,4 +57,17 @@ void PlayerProjectile::ConfigureBullet(PlayerProjectileType type, const sf::Text
         sprite.setRotation(sf::degrees(180.f));
         break;
     }
+}
+
+sf::FloatRect PlayerProjectile::GetCollisionBounds() const
+{
+    sf::Vector2f baseSize(6.f, 20.f);
+
+    sf::Vector2f scaledSize = {
+        baseSize.x * sprite.getScale().x,
+        baseSize.y * sprite.getScale().y
+    };
+    sf::Vector2f pos = sprite.getPosition();
+    return { pos - scaledSize / 2.f, scaledSize };
+
 }

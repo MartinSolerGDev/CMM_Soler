@@ -1,20 +1,42 @@
 #include "Duck.h"
 #include "../Public/FileHelpers.h"
+#include <iostream>
+#include <AudioManager.h>
 
 
-Duck::Duck(const sf::Texture& texture, const DuckType& duckType) : Character(texture), currentDuckType(duckType), movementProfile(GetProfileForType(duckType))
+Duck::Duck(const sf::Texture& texture, const sf::Texture& explosionTex, const DuckType& duckType) : Character(texture), explosionTexture(explosionTex), currentDuckType(duckType), movementProfile(GetProfileForType(duckType))
 {
     sprite.setOrigin({32.f, 32.f });
     sprite.setPosition(sf::Vector2f{ 1280.f / 2.f, 360.f });
     sprite.setRotation(sf::degrees(0.f));
+    sprite.setScale({ 2.f,2.f });
     sprite.setTextureRect(sf::IntRect({ 0,0 }, { 64,64 }));
-    sprite.setScale({2.f,2.f});
 
     velocity.x = (FileHelpers::RandomFloat(0.f, 1.f) > 0.5f) ? 1.f : -1.f;
 }
 
 void Duck::Update(float deltaTime)
 {
+    if (isDying)
+    {
+        deathTimer += deltaTime;
+        if (deathTimer >= deathFrameInterval)
+        {
+            deathTimer = 0.f;
+            deathFrame++;
+            if (deathFrame < 3)
+            {
+                sprite.setTextureRect(sf::IntRect({ deathFrame * 64, 0 },{ 64, 64 }));
+            }
+            else
+            {
+                isDead = true; 
+
+            }
+        }
+        return; 
+    }
+
     UpdateMovement(deltaTime);
     UpdateFacingDirection(deltaTime);
     Animate(deltaTime);
@@ -36,9 +58,51 @@ sf::Vector2f Duck::GetDuckSize() const
     return sprite.getGlobalBounds().size;
 }
 
+sf::FloatRect Duck::GetCollisionBounds() const
+{
+    sf::FloatRect bounds = sprite.getGlobalBounds();
+
+    bounds.size *= 0.6f;
+    bounds.position += (sprite.getGlobalBounds().size - bounds.size) / 2.f;
+
+    return bounds;
+
+}
+
+bool Duck::IsDying() const
+{
+    return isDying;
+}
+
+bool Duck::IsDead() const
+{
+    return isDead;
+}
+
 void Duck::OnHit()
 {
-    //todo
+    if (isDying) return;
+    isDying = true;
+    deathTimer = 0.f;
+    deathFrame = 0;
+  
+    sprite.setTexture(explosionTexture, true); 
+    sprite.setOrigin({ 32.f, 32.f });
+    sprite.setTextureRect(sf::IntRect({ 0,0 }, { 64,64 }));
+
+    float scaleFactor = 2.f;
+    switch (currentDuckType)
+    {
+    case DuckType::Normal:    scaleFactor = 2.f;   break;
+    case DuckType::Rare:      scaleFactor = 2.5f; break;
+    case DuckType::Epic:      scaleFactor = 3.f;   break;
+    case DuckType::Legendary: scaleFactor = 3.5f; break;
+    }
+
+    float dirX = (velocity.x < 0.f) ? -1.f : 1.f;
+    sprite.setScale({ scaleFactor * dirX, scaleFactor });
+
+    AudioManager::Get().PlaySFX("DuckHit");
 }
 
 void Duck::UpdateMovement(float dt)

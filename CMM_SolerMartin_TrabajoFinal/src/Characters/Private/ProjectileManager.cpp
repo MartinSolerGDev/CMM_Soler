@@ -1,4 +1,5 @@
 #include "ProjectileManager.h"
+#include <AudioManager.h>
 
 ProjectileManager::ProjectileManager(const std::unordered_map<PlayerProjectileType, sf::Texture*>& bulletTextures, std::size_t poolSize) : textures(bulletTextures)
 {
@@ -7,7 +8,7 @@ ProjectileManager::ProjectileManager(const std::unordered_map<PlayerProjectileTy
     {
         pool.push_back(std::make_unique<PlayerProjectile>(*textures.at(PlayerProjectileType::Base), PlayerProjectileType::Base));
     }
-    ammo[PlayerProjectileType::Base] = 5;
+    ammo[PlayerProjectileType::Base] = 15;
     ammo[PlayerProjectileType::Normal] = 0;
     ammo[PlayerProjectileType::Rare] = 0;
     ammo[PlayerProjectileType::Epic] = 0;
@@ -26,15 +27,33 @@ void ProjectileManager::Draw(sf::RenderWindow& window)
 {
     for (auto& p : pool) 
     {
-        if (p->IsActive()) p->Draw(window);
+        if (p->IsActive())
+        {
+            p->Draw(window);
+#ifdef _DEBUG
+            sf::FloatRect bounds = p->GetCollisionBounds();
+            sf::RectangleShape box;
+            box.setPosition(bounds.position);
+            box.setSize(bounds.size);
+            box.setFillColor(sf::Color::Transparent);
+            box.setOutlineColor(sf::Color::Green);
+            box.setOutlineThickness(1.f);
+            window.draw(box);
+#endif
+        }
+
     }
 }
 
 void ProjectileManager::Fire(const sf::Vector2f& position, const sf::Vector2f& direction)
 {
     if (ammo[currentType] <= 0)
+    {
+        AudioManager::Get().PlaySFX("NoAmmo");
         return;
+    }
 
+    AudioManager::Get().PlaySFX("GunShoot");
     for (auto& p : pool)
     {
         if (!p->IsActive())

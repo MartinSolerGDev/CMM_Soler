@@ -15,7 +15,19 @@ void Character::Update(float deltaTime)
 
 void Character::Draw(sf::RenderWindow& window) const
 {
+
 	window.draw(sprite);
+
+#ifdef _DEBUG
+    sf::FloatRect bounds = sprite.getGlobalBounds();
+    sf::RectangleShape box;
+    box.setPosition(bounds.position);
+    box.setSize(bounds.size);            
+    box.setFillColor(sf::Color::Transparent);
+    box.setOutlineColor(sf::Color::Green);
+    box.setOutlineThickness(1.f);
+    window.draw(box);
+#endif
 }
 void Character::SetPosition(const sf::Vector2f& position) 
 {

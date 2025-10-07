@@ -20,6 +20,9 @@ public:
 	std::string GetRequestedScene() const;
 	void ClearRequestedScene();
 
+	virtual void OnEnterScene() = 0;
+	virtual void OnExitScene() = 0;
+
 protected:
 	sf::RenderWindow& window;
 	std::unique_ptr <sf::Sprite> background;

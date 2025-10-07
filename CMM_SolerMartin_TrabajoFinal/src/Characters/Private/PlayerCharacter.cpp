@@ -63,6 +63,7 @@ void PlayerCharacter::HandleEvent(const sf::Event& event)
                 if (projectileManager)
                 {
                     projectileManager->Fire(muzzle, dir);
+
                     fireTimer = fireCooldown;
                 }
             }

@@ -21,12 +21,17 @@ struct SpawnZone {
     }
 };
 
+struct DuckResources {
+    sf::Texture* normal;
+    sf::Texture* explosion;
+};
 
 
 class DuckManager
 {
 public:
-    DuckManager(const std::unordered_map<DuckType, sf::Texture*>& duckTextures,std::size_t maxDucks,float spawnIntervalSeconds);
+    DuckManager(const std::unordered_map<DuckType, DuckResources>& resources, std::size_t maxDucks, float spawnIntervalSeconds);
+
 
     ~DuckManager() = default;
 
@@ -43,6 +48,7 @@ public:
 
     std::vector<DuckManager::DuckSlot>& GetDucks();
 
+    bool hasReachedScapedDucks() const;
 
 private:
     DuckType ChooseDuckType();
@@ -50,11 +56,13 @@ private:
     void SpawnDuck();
 
     std::vector<DuckSlot> pool;
-    std::unordered_map<DuckType, sf::Texture*> textures;
+    std::unordered_map<DuckType, DuckResources> resources;
+
     std::size_t maxActiveDucks;
 
     float spawnInterval = 0.f;
     float spawnTimer = 0.f;
+    float elapsedTime = 0.f;
 
     float spawnMinX = 350.f;
     float spawnMaxX = 1180.f;
@@ -70,5 +78,8 @@ private:
     float probEpic = 0.f;
     float probLegendary = 0.f;
 
+
+
+    int scapedDucks = 0;
 };
 

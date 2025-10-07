@@ -15,7 +15,7 @@ public:
     bool IsActive() const;
 
     sf::FloatRect GetSpriteBounds() const;
-
+    virtual sf::FloatRect GetCollisionBounds() const = 0;
 protected:
     sf::Sprite sprite;
     sf::Vector2f velocity;

@@ -7,6 +7,8 @@
 //Custom
 #include "MenuScene.h"
 #include "GameplayScene.h"
+#include <CreditScene.h>
+#include <SettingsScene.h>
 
 MenuScene::MenuScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager)
     : Scene(window), resources(resources), manager(manager), font(resources.GetFont("../assets/font.ttf"))
@@ -20,16 +22,12 @@ MenuScene::MenuScene(sf::RenderWindow& window, ResourcesManager& resources, Scen
     title->setOrigin(title->getLocalBounds().getCenter());
     title->setPosition({ winSize.x / 2,150.f});
 
-
-    buttonSprite = std::make_unique<sf::Sprite>(resources.GetTexture("../assets/Background/buttonBackground.png", sf::IntRect({ 0,0 }, { 400, 250 })));
-    buttonSprite->setOrigin(buttonSprite->getGlobalBounds().getCenter());
-    buttonSprite->setScale({ 0.75f, 0.5f });
-    buttonSprite->setPosition({ winSize.x / 2, winSize.y / 2 });
-    buttonTxt = std::make_unique<sf::Text>(font, "PLAY", 35);
-    buttonTxt->setFillColor(sf::Color::Black);
-    buttonTxt->setOrigin(buttonTxt->getLocalBounds().getCenter());
-    buttonTxt->setPosition({ winSize.x / 2, winSize.y / 2});
-
+   //Buttons
+    buttons.push_back(CreateButton("PLAY", winSize.y / 2 - 50.f, [&] {manager.PushScene(std::make_unique<GameplayScene>(window, resources, manager));}));
+    buttons.push_back(CreateButton("SETTINGS", winSize.y / 2 + 50, [&] {manager.PushScene(std::make_unique<SettingsScene>(window, resources, manager, false));}));
+    buttons.push_back(CreateButton("CREDITS", winSize.y / 2 + 150.f, [&] {manager.PushScene(std::make_unique<CreditScene>(window, resources, manager)); }));
+    buttons.push_back(CreateButton("QUIT", winSize.y / 2 + 250.f, [&] {window.close();}));
+    
     enterToContinue = std::make_unique<sf::Text>(font, "Press play or enter to continue", 25);
     enterToContinue->setFillColor(sf::Color::Black);
     enterToContinue->setOrigin(enterToContinue->getLocalBounds().getCenter());
@@ -52,22 +50,77 @@ void MenuScene::HandleEvent(const sf::Event& event)
             sf::Vector2i mousePos = sf::Mouse::getPosition(window);
             sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-            if (buttonSprite->getGlobalBounds().contains(worldPos))
+            for (auto& b : buttons)
             {
-                manager.PushScene(std::make_unique<GameplayScene>(window, resources, manager));
+                if (b.buttonSprite && b.buttonSprite->getGlobalBounds().contains(worldPos))
+                {
+                    if (b.onClick) b.onClick();
+                    break;
+                }
             }
         }
     }
 }
 
-void MenuScene::Update(float deltaTime) {}
+void MenuScene::Update(float deltaTime)
+{
+    sf::Vector2i mousePosI = sf::Mouse::getPosition(window);
+    sf::Vector2f mousePos(static_cast<float>(mousePosI.x), static_cast<float>(mousePosI.y));
+
+    for (auto& b : buttons)
+    {
+        if (b.buttonSprite && b.buttonSprite->getGlobalBounds().contains(mousePos))
+        {
+            if (b.buttonTxt)
+                b.buttonTxt->setFillColor(sf::Color::Green);
+        }
+        else
+        {
+            if (b.buttonTxt)
+                b.buttonTxt->setFillColor(sf::Color::Black); 
+        }
+    }
+}
 
 void MenuScene::RenderScene()
 {
     if (title) window.draw(*title);
-    if (buttonSprite) window.draw(*buttonSprite);
-    if (buttonTxt) window.draw(*buttonTxt);
+    for (auto& b : buttons)
+    {
+        if (b.buttonSprite) window.draw(*b.buttonSprite);
+        if (b.buttonTxt)   window.draw(*b.buttonTxt);
+    }
+
     if (enterToContinue) window.draw(*enterToContinue);
 }
 
+void MenuScene::OnEnterScene()
+{
+    AudioManager::Get().PlayMusic("MenuMusic", true);
+}
 
+void MenuScene::OnExitScene()
+{
+    AudioManager::Get().StopMusic();
+}
+
+Button MenuScene::CreateButton(const std::string& label, float y, std::function<void()> onClick)
+{
+    Button b;
+    auto& buttonTex = resources.GetTexture("../assets/Background/buttonBackground.png",
+        sf::IntRect({ 0,0 }, { 400,250 }));
+
+    b.buttonSprite = std::make_unique<sf::Sprite>(buttonTex);
+    b.buttonSprite->setOrigin(b.buttonSprite->getGlobalBounds().getCenter());
+    b.buttonSprite->setScale({ 0.75f, 0.5f });
+    b.buttonSprite->setPosition({ window.getSize().x / 2.f, y });
+
+    b.buttonTxt = std::make_unique<sf::Text>(font, label, 30);
+    b.buttonTxt->setFillColor(sf::Color::Black);
+    b.buttonTxt->setOrigin(b.buttonTxt->getLocalBounds().getCenter());
+    b.buttonTxt->setPosition({ window.getSize().x / 2.f, y });
+
+    b.onClick = std::move(onClick);
+    return b;
+
+}

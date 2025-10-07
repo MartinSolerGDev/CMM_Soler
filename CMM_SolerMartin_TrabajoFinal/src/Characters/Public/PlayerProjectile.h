@@ -20,6 +20,8 @@ public:
     void Update(float deltaTime) override;
     void Draw(sf::RenderWindow& window) override;
     void ConfigureBullet(PlayerProjectileType type, const sf::Texture& texture);
+    sf::FloatRect GetCollisionBounds() const override;
+
 private:
     PlayerProjectileType currentType;
 };
