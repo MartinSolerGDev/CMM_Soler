@@ -9,7 +9,7 @@ The goal is to capture the retro essence of the original while introducing dynam
 
 - **Language:** C++  
 - **Graphics Framework:** [SFML](https://www.sfml-dev.org/)  
-- **Architecture:** modular, scalable, and maintainable (design patterns applied: Factory, Object Pooling, Singleton).  
+- **Architecture:** modular, scalable, and maintainable (design patterns applied: Factory, Object Pooling, Gameloop, Facade and others.  
 - **Development Tools:** Visual Studio  
 
 ---
