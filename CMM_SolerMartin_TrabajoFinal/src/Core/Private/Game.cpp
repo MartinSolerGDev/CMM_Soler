@@ -9,7 +9,7 @@
 #include "MenuScene.h"
 #include <AudioManager.h>
 Game::Game()
-    : window(sf::VideoMode({ 1280, 720 }), "Quack Attack: Reloaded")
+    : window(sf::VideoMode({ 1280, 720 }), "Quack Attack: Reloaded", sf::Style::None)
 {
     window.setFramerateLimit(60);
     sceneManager.PushScene(std::make_unique<MenuScene>(window, resources, sceneManager));

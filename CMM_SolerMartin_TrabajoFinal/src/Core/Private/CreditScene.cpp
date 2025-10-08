@@ -1,10 +1,10 @@
 #include "CreditScene.h"
 #include <AudioManager.h>
 
-CreditScene::CreditScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager) : Scene(window), resources(resources), manager(manager), font(resources.GetFont("../assets/font.ttf"))
+CreditScene::CreditScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager) : Scene(window), resources(resources), manager(manager), font(resources.GetFont("res/assets/font.ttf"))
 {
     sf::Vector2f winSize(window.getSize());
-    SetBackground(resources.GetTexture("../assets/Background/menubackground.png",sf::IntRect({ 0,0 }, { 1280,720 })));
+    SetBackground(resources.GetTexture("res/assets/Background/menubackground.png",sf::IntRect({ 0,0 }, { 1280,720 })));
 
 
     title = std::make_unique<sf::Text>(font, "Credits", 50);
@@ -38,7 +38,7 @@ CreditScene::CreditScene(sf::RenderWindow& window, ResourcesManager& resources, 
         creditsLines.push_back(std::move(txt));
     }
 
-    auto& buttonTex = resources.GetTexture("../assets/Background/buttonBackground.png",sf::IntRect({ 0,0 }, { 400,250 }));
+    auto& buttonTex = resources.GetTexture("res/assets/Background/buttonBackground.png",sf::IntRect({ 0,0 }, { 400,250 }));
 
     backSprite = std::make_unique<sf::Sprite>(buttonTex);
     backSprite->setOrigin(backSprite->getGlobalBounds().getCenter());

@@ -6,9 +6,9 @@ void AudioManager::Init(ResourcesManager& res)
 	resources = &res;
 	sf::Listener::setGlobalVolume(MasterVolume);
 
-    sfxBuffers["DuckHit"] = &resources->GetSound("../assets/Sounds/DuckHit.wav");
-    sfxBuffers["GunShoot"] = &resources->GetSound("../assets/Sounds/GunShoot.wav");
-    sfxBuffers["NoAmmo"] = &resources->GetSound("../assets/Sounds/NoAmmo.wav");
+    sfxBuffers["DuckHit"] = &resources->GetSound("res/assets/Sounds/DuckHit.wav");
+    sfxBuffers["GunShoot"] = &resources->GetSound("res/assets/Sounds/GunShoot.wav");
+    sfxBuffers["NoAmmo"] = &resources->GetSound("res/assets/Sounds/NoAmmo.wav");
 }
 
 void AudioManager::SetVolume(VolumeType type, float val)
@@ -55,9 +55,9 @@ void AudioManager::PlayMusic(const std::string& id, bool loop)
     }
 
     auto newMusic = std::make_unique<sf::Music>();
-    if (!newMusic->openFromFile("../assets/Sounds/" + id + ".ogg"))
+    if (!newMusic->openFromFile("res/assets/Sounds/" + id + ".ogg"))
     {
-        std::cerr << "Error cargando música: " << "../assets/Sounds/" + id + ".ogg" << std::endl;
+        std::cerr << "Error cargando música: " << "res/assets/Sounds/" + id + ".ogg" << std::endl;
         return;
     }
 

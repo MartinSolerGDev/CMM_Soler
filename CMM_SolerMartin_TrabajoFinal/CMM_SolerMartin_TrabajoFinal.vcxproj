@@ -102,8 +102,10 @@
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(TargetDir)res\" MKDIR "$(TargetDir)res\"
-XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
+      <Command>IF NOT EXIST "$(TargetDir)res\" (MKDIR "$(TargetDir)res\")
+XCOPY "$(ProjectDir)res\*" "$(TargetDir)res\" /E /H /Y
+XCOPY "$(ProjectDir)res\dll\*.dll" "$(TargetDir)" /Y
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -121,14 +123,16 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)libs\SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(TargetDir)res\" MKDIR "$(TargetDir)res\"
-XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
+      <Command>IF NOT EXIST "$(TargetDir)res\" (MKDIR "$(TargetDir)res\")
+XCOPY "$(ProjectDir)res\*" "$(TargetDir)res\" /E /H /Y
+XCOPY "$(ProjectDir)res\dll\*.dll" "$(TargetDir)" /Y
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -147,8 +151,10 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(TargetDir)res\" MKDIR "$(TargetDir)res\"
-XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
+      <Command>IF NOT EXIST "$(TargetDir)res\" (MKDIR "$(TargetDir)res\")
+XCOPY "$(ProjectDir)res\*" "$(TargetDir)res\" /E /H /Y
+XCOPY "$(ProjectDir)res\dll\*.dll" "$(TargetDir)" /Y
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -166,14 +172,16 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)libs\SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(TargetDir)res\" MKDIR "$(TargetDir)res\"
-XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
+      <Command>IF NOT EXIST "$(TargetDir)res\" (MKDIR "$(TargetDir)res\")
+XCOPY "$(ProjectDir)res\*" "$(TargetDir)res\" /E /H /Y
+XCOPY "$(ProjectDir)res\dll\*.dll" "$(TargetDir)" /Y
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

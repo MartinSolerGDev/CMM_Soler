@@ -3,14 +3,14 @@
 #include "GameplayScene.h"
 #include "MenuScene.h"
 
-LoseScene::LoseScene(sf::RenderWindow& windows, ResourcesManager& res, SceneManager& sm, int score) : Scene(windows), resources(res), sceneManager(sm), font(resources.GetFont("../assets/font.ttf"))
+LoseScene::LoseScene(sf::RenderWindow& windows, ResourcesManager& res, SceneManager& sm, int score) : Scene(windows), resources(res), sceneManager(sm), font(resources.GetFont("res/assets/font.ttf"))
 {
     sf::Vector2f winSize(window.getSize());
 
-    SetBackground(resources.GetTexture("../assets/Background/menubackground.png",
+    SetBackground(resources.GetTexture("res/assets/Background/menubackground.png",
         sf::IntRect({ 0,0 }, { 1280,720 })));
 
-    auto& buttonTex = resources.GetTexture("../assets/Background/buttonBackground.png",sf::IntRect({ 0,0 }, { 400,250 }));
+    auto& buttonTex = resources.GetTexture("res/assets/Background/buttonBackground.png",sf::IntRect({ 0,0 }, { 400,250 }));
 
     title = std::make_unique<sf::Text>(font, "YOU LOSE!", 80);
     title->setFillColor(sf::Color::Red);

@@ -11,10 +11,10 @@
 #include <SettingsScene.h>
 
 MenuScene::MenuScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager)
-    : Scene(window), resources(resources), manager(manager), font(resources.GetFont("../assets/font.ttf"))
+    : Scene(window), resources(resources), manager(manager), font(resources.GetFont("res/assets/font.ttf"))
 {
-    SetBackground(resources.GetTexture("../assets/Background/menubackground.png", sf::IntRect({ 0,0 }, { 1280,720 })));
-    sf::Font& font = resources.GetFont("../assets/font.ttf");
+    SetBackground(resources.GetTexture("res/assets/Background/menubackground.png", sf::IntRect({ 0,0 }, { 1280,720 })));
+    sf::Font& font = resources.GetFont("res/assets/font.ttf");
 
     sf::Vector2f winSize(window.getSize());
     title = std::make_unique<sf::Text>(font, "Quack Attack: Reloaded", 60);
@@ -107,7 +107,7 @@ void MenuScene::OnExitScene()
 Button MenuScene::CreateButton(const std::string& label, float y, std::function<void()> onClick)
 {
     Button b;
-    auto& buttonTex = resources.GetTexture("../assets/Background/buttonBackground.png",
+    auto& buttonTex = resources.GetTexture("res/assets/Background/buttonBackground.png",
         sf::IntRect({ 0,0 }, { 400,250 }));
 
     b.buttonSprite = std::make_unique<sf::Sprite>(buttonTex);

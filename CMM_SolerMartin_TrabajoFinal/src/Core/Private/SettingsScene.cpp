@@ -1,18 +1,18 @@
 #include "SettingsScene.h"
 #include "MenuScene.h"
 
-SettingsScene::SettingsScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager, bool pauseMode) : Scene(window), resources(resources), manager(manager), font(resources.GetFont("../assets/font.ttf")), pauseMode(pauseMode)
+SettingsScene::SettingsScene(sf::RenderWindow& window, ResourcesManager& resources, SceneManager& manager, bool pauseMode) : Scene(window), resources(resources), manager(manager), font(resources.GetFont("res/assets/font.ttf")), pauseMode(pauseMode)
 {
     sf::Vector2f winSize(window.getSize());
 
-    SetBackground(resources.GetTexture("../assets/Background/menubackground.png", sf::IntRect({ 0,0 }, { 1280,720 })));
+    SetBackground(resources.GetTexture("res/assets/Background/menubackground.png", sf::IntRect({ 0,0 }, { 1280,720 })));
 
     title = std::make_unique<sf::Text>(font, pauseMode ? "Pause Menu" : "Settings", 50);
     title->setOrigin(title->getLocalBounds().getCenter());
     title->setPosition({ winSize.x / 2, 80.f });
     title->setFillColor(sf::Color::Black);
 
-    auto& buttonTex = resources.GetTexture("../assets/Background/buttonBackground.png", sf::IntRect({ 0,0 }, { 400,250 }));
+    auto& buttonTex = resources.GetTexture("res/assets/Background/buttonBackground.png", sf::IntRect({ 0,0 }, { 400,250 }));
 
     // Crear controles de volumen
     std::vector<std::pair<VolumeType, std::string>> types = {

@@ -8,8 +8,8 @@ GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resourc
 	: Scene(window), resources(resources), manager(manager)
 {
     //Background
-    SetBackground(resources.GetTexture("../assets/Background/gameplaybackground.png", sf::IntRect({0,0}, {1280,720})));
-    auto& cloudTex = resources.GetTexture("../assets/Background/Cloud.png", {});
+    SetBackground(resources.GetTexture("res/assets/Background/gameplaybackground.png", sf::IntRect({0,0}, {1280,720})));
+    auto& cloudTex = resources.GetTexture("res/assets/Background/Cloud.png", {});
     for (int i = 0; i < cloudAmount; ++i)
     {
         sf::Sprite cloud(cloudTex);
@@ -21,23 +21,23 @@ GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resourc
         clouds.push_back(cloud);
     }
 
-    auto& sunTex = resources.GetTexture("../assets/Background/Sun.png", {});
+    auto& sunTex = resources.GetTexture("res/assets/Background/Sun.png", {});
     Sun = std::make_unique<sf::Sprite>(sunTex);
     Sun->setOrigin({sunTex.getSize().x / 2.f, sunTex.getSize().y / 2.f});
     Sun->setPosition({1100.f, 100.f});
     Sun->setScale({0.5f, 0.5f});
 
     //Gameplay
-    auto& playerTex = resources.GetTexture("../assets/player.png", {});
-    auto& crosshairTex = resources.GetTexture("../assets/Bullets/crosshair.png", {});
+    auto& playerTex = resources.GetTexture("res/assets/player.png", {});
+    auto& crosshairTex = resources.GetTexture("res/assets/Bullets/crosshair.png", {});
     player = std::make_unique<PlayerCharacter>(window, playerTex, crosshairTex);
 
     //Bullets
-    auto& bulletTex = resources.GetTexture("../assets/Bullets/bullet.png", {});
-    auto& normalBulletTex = resources.GetTexture("../assets/Bullets/NormalBullet.png", {});
-    auto& rareBulletTex = resources.GetTexture("../assets/Bullets/RareBullet.png", {});
-    auto& epicBulletTex = resources.GetTexture("../assets/Bullets/EpicBullet.png", {});
-    auto& legendaryBulletTex = resources.GetTexture("../assets/Bullets/LegendaryBullet.png", {});
+    auto& bulletTex = resources.GetTexture("res/assets/Bullets/bullet.png", {});
+    auto& normalBulletTex = resources.GetTexture("res/assets/Bullets/NormalBullet.png", {});
+    auto& rareBulletTex = resources.GetTexture("res/assets/Bullets/RareBullet.png", {});
+    auto& epicBulletTex = resources.GetTexture("res/assets/Bullets/EpicBullet.png", {});
+    auto& legendaryBulletTex = resources.GetTexture("res/assets/Bullets/LegendaryBullet.png", {});
 
     bulletTextures = {{PlayerProjectileType::Base, &bulletTex}, {PlayerProjectileType::Normal,&normalBulletTex}, {PlayerProjectileType::Rare, &rareBulletTex}, {PlayerProjectileType::Epic, &epicBulletTex},{PlayerProjectileType::Legendary, &legendaryBulletTex}};
     
@@ -45,15 +45,15 @@ GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resourc
     player->SetProjectileManager(projectileManager.get());
 
     //Ducks:
-    auto& duckNormalTex = resources.GetTexture("../assets/Ducks/duck.png", {});
-    auto& duckRareTex = resources.GetTexture("../assets/Ducks/RareDuck.png", {});
-    auto& duckEpicTex = resources.GetTexture("../assets/Ducks/EpicDuck.png", {});
-    auto& duckLegendaryTex = resources.GetTexture("../assets/Ducks/LegendaryDuck.png", {});
+    auto& duckNormalTex = resources.GetTexture("res/assets/Ducks/duck.png", {});
+    auto& duckRareTex = resources.GetTexture("res/assets/Ducks/RareDuck.png", {});
+    auto& duckEpicTex = resources.GetTexture("res/assets/Ducks/EpicDuck.png", {});
+    auto& duckLegendaryTex = resources.GetTexture("res/assets/Ducks/LegendaryDuck.png", {});
 
-    auto& duckNormalExplosionTex = resources.GetTexture("../assets/Ducks/duckExplosion.png", {});
-    auto& duckRareExplosionTex = resources.GetTexture("../assets/Ducks/rareDuckExplosion.png", {});
-    auto& duckEpicExplosionTex = resources.GetTexture("../assets/Ducks/epicDuckExplosion.png", {});
-    auto& duckLegendaryExplosionTex = resources.GetTexture("../assets/Ducks/legendaryDuckExplosion.png", {});
+    auto& duckNormalExplosionTex = resources.GetTexture("res/assets/Ducks/duckExplosion.png", {});
+    auto& duckRareExplosionTex = resources.GetTexture("res/assets/Ducks/rareDuckExplosion.png", {});
+    auto& duckEpicExplosionTex = resources.GetTexture("res/assets/Ducks/epicDuckExplosion.png", {});
+    auto& duckLegendaryExplosionTex = resources.GetTexture("res/assets/Ducks/legendaryDuckExplosion.png", {});
 
     std::unordered_map<DuckType, DuckResources> duckResources = {
         {DuckType::Normal,    {&duckNormalTex,    &duckNormalExplosionTex}},
@@ -70,8 +70,8 @@ GameplayScene::GameplayScene(sf::RenderWindow& window, ResourcesManager& resourc
     AddTree({ 1040.f, 425.f }, { 1050.f, 350.f }, { 1100.f, 500.f });
 
     //HUD
-    auto& font = resources.GetFont("../assets/font.ttf");
-    auto& buttonTex = resources.GetTexture("../assets/Background/Settings.png", sf::IntRect({ 0,0 }, { 400,400 }));
+    auto& font = resources.GetFont("res/assets/font.ttf");
+    auto& buttonTex = resources.GetTexture("res/assets/Background/Settings.png", sf::IntRect({ 0,0 }, { 400,400 }));
 
     hud = std::make_unique<GameplayHUD>(font, bulletTextures, buttonTex);
 }
@@ -248,7 +248,7 @@ void GameplayScene::OnExitScene()
 
 void GameplayScene::AddTree(const sf::Vector2f& pos, const sf::Vector2f& spawnMin, const sf::Vector2f& spawnMax)
 {
-    auto& treeTexture = resources.GetTexture("../assets/Background/tree.png", {});
+    auto& treeTexture = resources.GetTexture("res/assets/Background/tree.png", {});
     Tree temp;
     temp.tree = std::make_unique<sf::Sprite>(treeTexture);
     temp.spawnZone = sf::FloatRect({spawnMin.x, spawnMin.y}, {spawnMax.x - spawnMin.x, spawnMax.y - spawnMin.y });
