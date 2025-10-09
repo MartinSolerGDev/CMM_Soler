@@ -50,4 +50,4 @@ Este proyecto no hubiera sido posible sin el apoyo y la guía de:
 - Prof. Nicolas Mironoff.
 
 ## ITCH.IO 
-<a href="[url](https://msoler.itch.io/quack-attack-reloaded)" target="_blank">Link to itch.io</a>
+<a href="https://msoler.itch.io/quack-attack-reloaded" target="_blank">Link to itch.io</a>
